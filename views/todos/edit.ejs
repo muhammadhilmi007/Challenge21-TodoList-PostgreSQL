@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Data</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="row align-items-center rounded-3 border shadow-lg">
+            <div class="title text-center">
+                <h2>Updating Data</h2>
+            </div>
+            <div class="search-form">
+                <form method="POST" id="editForm">
+                    <div class="search-controls">
+                        <div class="form-group">
+                            <label class="form-label" for="title">Title</label>
+                            <input type="text" id="title" name="title" placeholder="Insert your title"
+                                   value="<%= todo.title %>" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="deadline">Deadline</label>
+                            <input type="datetime-local" id="deadline" name="deadline"
+                                   value="<%= moment(todo.deadline).format('YYYY-MM-DD HH:mm') %>"
+                                   class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="complete">Done</label>
+                            <input type="checkbox" class="form-check-input" id="complete" name="complete"
+                                <%=todo.complete ? 'checked' : '' %>>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="footer">
+                <div class="button-group">
+                    <button type="submit" class="btn btn-info" onclick="submitForm()"><i class="fa-solid fa-floppy-disk"></i></button>
+                    <button type="button" class="btn btn-warning" onclick="resetForm()"><i
+                            class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function submitForm() {
+            document.getElementById('editForm').submit();
+        }
+        function resetForm() {
+            window.location.href = "/todos";
+        }
+    </script>
+</body>
+
+</html>

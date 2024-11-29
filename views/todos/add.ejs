@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adding Data</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+</head>
+
+<body>
+  <div class="container my-5">
+    <div class="row align-items-center rounded-3 border shadow-lg">
+      <div class="title text-center">
+        <h2>Adding Data</h2>
+      </div>
+      <div class="search-form">
+        <form id="addForm" method="POST">
+          <div class="search-controls">
+            <div class="form-group">
+              <label class="form-label" for="title">Title</label>
+              <input type="text" id="title" name="title" placeholder="Insert your title" required>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="footer">
+        <div class="button-group">
+          <button onclick="submitForm()" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i>
+          </button>
+          <button onclick="resetForm()" class="btn btn-warning">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function submitForm() {
+      var title = document.getElementById("title").value;
+      if (title == "") {
+        alert("Title must be filled out");
+        return;
+      }
+      document.getElementById("addForm").submit();
+    }
+
+    function resetForm() {
+      document.getElementById("title").value = "";
+    }
+  </script>
+</body>
+</html>

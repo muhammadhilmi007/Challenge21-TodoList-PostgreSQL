@@ -1,0 +1,320 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-admin {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-admin a {
+  text-decoration: none;
+  color: white;
+  
+}
+
+.user-admin button {
+  background-color: #838383;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-admin-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+}
+
+.user-admin-left img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.user-admin-left span {
+  font-size: 30px;
+}
+
+.title {
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.title h1 {
+  text-align: center;
+}
+
+.search-form {
+  padding: 20px;
+}
+
+/* Style untuk form container */
+.container {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+/* Style untuk form */
+.search-controls {
+  display: grid;
+  grid-template-columns: 1fr;  /* Ubah menjadi 1 kolom */
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  width: 120px;
+  font-weight: normal;
+}
+
+/* Style untuk input */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+/* Style untuk radio buttons */
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+/* Style untuk tombol */
+.button-group {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-search {
+  background-color: #5bc0de;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-reset {
+  background-color: #f0ad4e;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.line {
+  border-top: 2px solid #dee2e6;
+  margin-top: 10px;
+}
+
+/* Style untuk tabel */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+
+/* Style untuk tombol aksi */
+.btn-update {
+  background-color: #458a45;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.btn-delete {
+  background-color: #a33d3a;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+/* Style untuk button add */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.btn-add {
+  background-color: #4e4eff;
+  color: white;
+  border: none;
+  padding: 8px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-add a {
+  text-decoration: none;
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #f0ad4e;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancel a {
+  text-decoration: none;
+  color: white;
+}
+
+/* Style untuk pagination */
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4e4eff;
+  color: white;
+  border: 1px solid #4e4eff;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination a:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.pagination a:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/* Style untuk form edit */
+.body-edit {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-edit {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 70%;
+  max-width: 1200px;
+}
+
+.form-edit-group {
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+.footer-edit {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #dee2e6;
+  width: 100%; /* Menggunakan lebar penuh */
+  box-sizing: border-box; /* Memastikan padding termasuk dalam width */
+}
+
+/* Style untuk form add */
+.body-add {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-add {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 70%;
+  max-width: 1200px;
+}
+
+.form-add-group {
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+.footer-add {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #dee2e6;
+  width: 100%; /* Menggunakan lebar penuh */
+  box-sizing: border-box; /* Memastikan padding termasuk dalam width */
+}

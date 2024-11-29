@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar</title>
+
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+</head>
+
+<body>
+    <div class="container my-4">
+        <div class="row align-items-center rounded-3 border shadow-lg">
+            <div class="title text-center">
+                <h2>Change Avatar</h2>
+            </div>
+            <div class="search-form">
+                <form method="POST" id="addImage" enctype="multipart/form-data">
+                    <div class="search-controls">
+                        <div class="form-group">
+                            <label class="form-label" for="avatar">Avatar</label>
+                            <input type="file" id="inputImage" accept="image/*" class="form-control" name="avatar"
+                                placeholder="Insert your avatar" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="avatar">Preview</label>
+                            <img src="<%= previewAvatar ? `../images/${previewAvatar}` : '../images/avatar.jpg' %>"
+                                alt="defaultAvatar" class="ImageAvatar rounded-3" id="avatar" width="300px" height="300px">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="footer">
+                <div class="button-group">
+                    <button type="button" class="btn btn-primary" onclick="submitForm()"><i class="fa-solid fa-floppy-disk"></i></button>
+                    <button type="button" class="btn btn-warning" onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        inputImage.onchange = () => {
+            const [file] = inputImage.files
+            if (file) {
+                avatar.src = URL.createObjectURL(file)
+            }
+        }
+        function submitForm() {
+            document.getElementById("addImage").submit();
+        }
+        function resetForm() {
+            window.location.href = "/todos";
+        }
+    </script>
+</body>
+
+</html>

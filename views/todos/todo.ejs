@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BREADS (Browse, Read, Edit, Add, Delete, Sort)</title>
+
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+</head>
+
+<body>
+  <%- include('../partials/alert.ejs') %>
+    <div class="card column-gap-1 my-4">
+      <div class="user-admin">
+        <div class="user-admin-left">
+          <a href="/upload/<%= usersid %>">
+            <img src="/images/<%= avatar ? avatar : 'avatar.jpg' %>" alt="avatar" class="rounded-circle" width="100px"
+              height="100px" />
+          </a>
+          <h3 class="text">Welcome, <%= users.email %>
+          </h3>
+        </div>
+        <button class="btn btn-secondary">
+          <i class="fa-solid fa-right-from-bracket" style="margin-right: 5px; color: white;"></i>
+          <a href="/logout" class="logout" style="color: white;">Sign Out</a>
+        </button>
+      </div>
+
+      <div class="title">
+        <h2>PostgreSQL BREADS (Browse, Read, Edit, Add, Delete, Sort)</h2>
+      </div>
+
+      <div class="search-form">
+        <form action="" method="GET">
+          <input type="hidden" name="page" value="1">
+          <input type="hidden" name="sort" value="desc">
+          <input type="hidden" name="typeSort" value="id">
+          <div class="search-controls">
+            <div class="form-group">
+              <label for="name" class="form-label">Title</label>
+              <input type="text" name="title" class="add-box" placeholder="Insert your title"
+                value="<%= query.title %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="startdate">Deadline</label>
+              <input type="date" id="startdate" name="startDate" placeholder="dd/mm/yyyy"
+                value="<%= query.startDate || '' %>">
+              <span style="margin: 0 10px">s.d.</span>
+              <input type="date" id="enddate" name="endDate" placeholder="dd/mm/yyyy"
+                value="<%= query.endDate || '' %>" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="complete">Complete</label>
+              <% if (query.complete=='true' ) { %>
+                <select id="complete" name="complete">
+                  <option value="">-select complete-</option>
+                  <option value="true" selected>Done</option>
+                  <option value="false">Not Yet</option>
+                </select>
+                <% } else if (query.complete=='false' ) { %>
+                  <select id="complete" name="complete">
+                    <option value="">-select complete-</option>
+                    <option value="true">Done</option>
+                    <option value="false" selected>Not Yet</option>
+                  </select>
+                  <% } else { %>
+                    <select id="complete" name="complete">
+                      <option value="" selected>-select complete-</option>
+                      <option value="true">Done</option>
+                      <option value="false">Not Yet</option>
+                    </select>
+                    <% } %>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Operation</label>
+              <div class="radio-group">
+                <% if (query.type_search=='OR' ) { %>
+                  <label>
+                    <input type="radio" name="type_search" value="OR" checked /> OR
+                  </label>
+                  <label>
+                    <input type="radio" name="type_search" value="AND" /> AND
+                  </label>
+                  <% } else if (query.type_search=='AND' ) { %>
+                    <label>
+                      <input type="radio" name="type_search" value="OR" /> OR
+                    </label>
+                    <label>
+                      <input type="radio" name="type_search" value="AND" checked /> AND
+                    </label>
+                    <% } else { %>
+                      <label>
+                        <input type="radio" name="type_search" value="OR" checked /> OR
+                      </label>
+                      <label>
+                        <input type="radio" name="type_search" value="AND" /> AND
+                      </label>
+                      <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button type="button" onclick="resetForm()" class="btn btn-warning"><i
+                class="fa-solid fa-rotate"></i></button>
+          </div>
+        </form>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="table-responsive mt-4">
+        <table class="table table-striped table-hover align-middle">
+          <thead class="table-header">
+            <tr>
+              <th>No.</th>
+              <th>Title <a style="color: black;"
+                  href="/todos<%= url.replace(`typeSort=${typeSort}`, `typeSort=title`).replace(`sort=${sort}`, `sort=${sort == 'desc' ? 'asc' : 'desc'}`) %>"><i
+                    class="fa-solid fa-<%= typeSort == 'title' ? sort=='desc' ? 'sort-down' : 'sort-up' : 'sort' %>"></i></a>
+              </th>
+              <th>Complete <a style="color: black;"
+                  href="/todos<%= url.replace(`typeSort=${typeSort}`, `typeSort=complete`).replace(`sort=${sort}`, `sort=${sort == 'desc' ? 'asc' : 'desc'}`) %>"><i
+                    class="fa-solid fa-<%= typeSort == 'complete' ? sort=='desc' ? 'sort-down' : 'sort-up' : 'sort' %>"></i></a>
+              </th>
+              <th>Deadline <a style="color: black;"
+                  href="/todos<%= url.replace(`typeSort=${typeSort}`, `typeSort=deadline`).replace(`sort=${sort}`, `sort=${sort == 'desc' ? 'asc' : 'desc'}`) %>"><i
+                    class="fa-solid fa-<%= typeSort == 'deadline' ? sort=='desc' ? 'sort-down' : 'sort-up' : 'sort' %>"></i></a>
+              </th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (todos.length === 0) { %>
+              <tr>
+                <td colspan="5" class="text-center">No data available</td>
+              </tr>
+            <% } else { %>
+              <% todos.forEach((todo, index)=> { %>
+                <% if (new Date(`${todo.deadline}`).getTime() < new Date().getTime() && todo.complete==false) { %>
+                  <tr>
+                    <td style="background-color: #ff564a;">
+                      <%= index + offset + 1 %>
+                    </td>
+                    <td style="background-color: #ff564a;">
+                      <%= todo.title %>
+                    </td>
+                    <td style="background-color: #ff564a;">
+                      <%= todo.complete ? 'Done' : 'Not Yet' %>
+                    </td>
+                    <td style="background-color: #ff564a;">
+                      <%= moment(todo.deadline).format("DD-MM-YYYY, h:mm:ss") %>
+                    </td>
+                    <td style="background-color: #ff564a;">
+                      <a href="/todos/edit/<%= todo.id %>" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
+                      <form action="/todos/delete/<%= todo.id %>" method="POST" class="d-inline"
+                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data <%= todo.title %> ?');">
+                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                  <% } else {%>
+                    <tr>
+                      <td>
+                        <%= index + offset + 1 %>
+                      </td>
+                      <td>
+                        <%= todo.title %>
+                      </td>
+                      <td>
+                        <%= todo.complete ? 'Done' : 'Not Yet' %>
+                      </td>
+                      <td>
+                        <%= moment(todo.deadline).format("DD-MM-YYYY, h:mm:ss") %>
+                      </td>
+                      <td>
+                        <a href="/todos/edit/<%= todo.id %>" class="btn btn-sm btn-success"><i
+                            class="fas fa-edit"></i></a>
+                        <form action="/todos/delete/<%= todo.id %>" method="POST" class="d-inline"
+                          onsubmit="return confirm(`Apakah Anda yakin ingin menghapus data '<%= todo.title %>' ?`);">
+                          <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                      </td>
+                    </tr>
+                    <% } %>
+                      <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <a href="/todos/add/<%= usersid %>" class="btn btn-primary me-2"><i class="fa-solid fa-plus"></i></a>
+
+        <div class="pagination pagination-sm">
+          <a class="page-link"
+            href="/todos<%=url.includes('page=')? url.replace(`page=${page}`, `page=${Math.max(1, Number(page) - 1)}`) : `?page=${Math.max(1, Number(page) - 1)}`%>">&laquo;</a>
+          <% for (let i=1; i <=pages; i++) { %>
+            <a class="page-link<%= i == page ? ' active' : '' %>"
+              href="/todos<%=url.includes('page=')? url.replace(`page=${page}`, `page=${i}`) : `?page=${i}`%>">
+              <%= i %>
+            </a>
+            <% } %>
+          <a class="page-link"
+            href="/todos<%=url.includes('page=')? url.replace(`page=${page}`, `page=${Math.min(pages, Number(page) + 1)}`) : `?page=${Math.min(pages, Number(page) + 1)}`%>">&raquo;</a>
+        </div>
+      </div>
+    </div>
+    <%- include('../partials/alert.ejs') %>
+      <script>
+        function resetForm() {
+          window.location.href = '/todos';
+        }
+
+        function showPagination() {
+          const paginationElement = document.querySelector('.pagination');
+          if (paginationElement) {
+            paginationElement.style.display = 'flex';
+          }
+        }
+
+        showPagination();
+      </script>
+</body>
+
+</html>
