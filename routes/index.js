@@ -21,7 +21,7 @@ module.exports = (db) => {
   // Mendefinisikan rute untuk permintaan POST ke URL root (login)
   router.post("/", async (req, res) => {
     try {
-      // Ekstrak email dan password dari body permintaan
+      // Ekstrak email dan password dari req body
       const { email, password } = req.body;
       // Query database untuk pengguna dengan email yang cocok
       const { rows: users } = await db.query(

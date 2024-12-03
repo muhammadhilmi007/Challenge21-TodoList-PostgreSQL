@@ -31,8 +31,8 @@ app.set("view engine", "ejs"); // Menggunakan EJS sebagai mesin template
 
 // Menyiapkan middleware
 app.use(logger("dev")); // Mencatat permintaan HTTP
-app.use(express.json()); // Mengurai badan permintaan JSON
-app.use(express.urlencoded({ extended: false })); // Mengurai badan permintaan URL-encoded
+app.use(express.json()); // Mengurai req.body JSON
+app.use(express.urlencoded({ extended: false })); // Mengurai req.body URL-encoded
 app.use(cookieParser()); // Mengurai cookie
 app.use(express.static(path.join(__dirname, "public"))); // Menyajikan file statis
 

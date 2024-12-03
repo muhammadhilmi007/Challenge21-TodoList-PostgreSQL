@@ -12,81 +12,79 @@ module.exports = function (db) {
   router.get('/', isLoggedIn, async function (req, res, next) {
     try {
       // Mengekstrak parameter query dan data sesi
-      const { page = 1, title, startDate, endDate, deadline, complete, type_search = "", sort = 'desc', typeSort = 'id' } = req.query;
-      const { usersid } = req.session.user;
+      const { page = 1, title, startDate, endDate, deadline, complete, type_search = "AND", sort = 'desc', typeSort = 'id' } = req.query;
+      const { usersid } = req.session.user; // Mengambil ID pengguna dari data session
       
       // Menyiapkan variabel untuk paginasi dan query
       const limit = 5;
       const offset = (page - 1) * 5;
       const queries = [];
-      const params = [];
-      const paramsCount = [];
+      const params = [usersid];
       
       // Mengambil data pengguna dari database
-      const { rows: users } = await db.query("SELECT * FROM users WHERE id = $1", [req.session.user.usersid]);
+      const { rows: users } = await db.query("SELECT * FROM users WHERE id = $1", [usersid]);
 
-      // Memulai query untuk menghitung total item
-      let sqlhitung = `SELECT COUNT(*) AS total FROM todolist WHERE userid = $1`;
-      paramsCount.push(req.session.user.usersid);
-      params.push(req.session.user.usersid);
+      // Memulai query untuk menghitung total item dan mengambil data
+      let sql = `SELECT * FROM todolist WHERE userid = $1`;
+      let countSql = `SELECT COUNT(*) AS total FROM todolist WHERE userid = $1`;
 
       // Menambahkan kondisi pencarian berdasarkan judul
       if (title) {
-        params.push(title);
-        paramsCount.push(title);
-        queries.push(`title ILIKE '%' || $${params.length} || '%'`);
+        params.push(`%${title}%`);
+        queries.push(`title ILIKE $${params.length}`);
       }
 
       // Menambahkan kondisi pencarian berdasarkan tanggal
       if (startDate && endDate) {
         params.push(startDate, endDate);
-        paramsCount.push(startDate, endDate);
         queries.push(`deadline BETWEEN $${params.length - 1} AND $${params.length}`);
       } else if (startDate) {
         params.push(startDate);
-        paramsCount.push(startDate);
         queries.push(`deadline >= $${params.length}`);
       } else if (endDate) {
         params.push(endDate);
-        paramsCount.push(endDate);
         queries.push(`deadline <= $${params.length}`);
       }
 
       // Menambahkan kondisi pencarian berdasarkan status penyelesaian
       if (complete) {
         params.push(complete);
-        paramsCount.push(complete);
         queries.push(`complete = $${params.length}`);
       }
 
-      // Membangun query utama
-      let sql = `SELECT * FROM todolist WHERE userid = $1`;
-
       // Menambahkan kondisi pencarian ke query utama
       if (queries.length > 0) {
-        sql += ` AND ${queries.join(` ${type_search} `)}`;
-        sqlhitung += ` AND ${queries.join(` ${type_search} `)}`;
+        const whereClause = queries.join(` ${type_search} `);
+        sql += ` AND (${whereClause})`;
+        countSql += ` AND (${whereClause})`;
       }
 
       // Menambahkan pengurutan
-      if (sort) {
-        sql += ` ORDER BY ${typeSort} ${sort}`;
-      }
+      sql += ` ORDER BY ${typeSort} ${sort}`;
 
       // Menambahkan paginasi
+      sql += ` LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
       params.push(limit, offset);
-      sql += ` LIMIT $${params.length - 1} OFFSET $${params.length}`;
 
       // Menjalankan query untuk menghitung total item
-      const { rows: countResult } = await db.query(sqlhitung, paramsCount);
-      const total = countResult[0].total;
+      const { rows: countResult } = await db.query(countSql, params.slice(0, -2));
+      const total = parseInt(countResult[0].total);
       const pages = Math.ceil(total / limit);
+
+      console.log(req.url);
+      
 
       // Membangun URL untuk paginasi
       const url = req.url == '/' ? `/?page=${page}&typeSort=${typeSort}&sort=${sort}` : req.url;
+
+      console.log(params);
+      
       
       // Menjalankan query utama untuk mengambil data todo
       const { rows: todos } = await db.query(sql, params);
+
+      console.log(todos);
+      
 
       // Merender halaman dengan data yang telah diambil
       res.render('todos/todo', {
